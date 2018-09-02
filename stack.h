@@ -129,13 +129,15 @@ public:
 	stack(const const_iterator begin, const const_iterator end) : _size(0), 
 																  _buffer(0), 
 																  _capacity(0){
-		_buffer = new T[end];
-		_size = end;
-		_capacity = end;
+		_buffer = new T[(end/sizeof(T))];
+		_size = (end/sizeof(T));
+		_capacity = (end/sizeof(T));
 
 		try {
 			for(const const_iterator i = begin; i != end; ++i)
-				_buffer[i] = &begin;
+				int a = 0;
+				_buffer[] = *begin;
+				++a;
 		}
 		catch(...) {
 			delete[] _buffer;
@@ -150,11 +152,6 @@ public:
 					  const const_iterator)" << std::endl;
 		#endif
 	}
-
-	/**
-		TODO:
-		Metodo per riempire lo stack ma se contiene già dei dati vengono rimossi.
-	*/
 
 	/**
 		@brief Operatore di assegnamento (METODO FONDAMENTALE)
@@ -327,15 +324,17 @@ public:
 		}
 
 		// Operatore di iterazione post-incremento
+		// (diminuisco perchè scorro _buffer dalla fine all'inizio)
 		const_iterator operator++(int) {
 			const_iterator tmp(*this);
-			++ptr;
+			--ptr;
 			return tmp;
 		}
 
 		// Operatore di iterazione pre-incremento
+		// (diminuisco perchè scorro _buffer dalla fine all'inizio)
 		const_iterator& operator++() {
-			++ptr;
+			--ptr;
 			return *this;
 		}
 
@@ -362,13 +361,15 @@ public:
 	}; // classe const_iterator
 	
 	// Ritorna l'iteratore all'inizio della sequenza dati
+	// (punta all'ultimo elemento perche l'inizio della pila è la fine di _buffer)
 	const_iterator begin() const {
-		return const_iterator(_buffer);
+		return const_iterator(_buffer+_capacity);
 	}
 	
 	// Ritorna l'iteratore alla fine della sequenza dati
+	// (punta al primo elemento perchè la fine della pila è l'inzio di _buffer)
 	const_iterator end() const {
-		return const_iterator(_buffer+_capacity);
+		return const_iterator(_buffer);
 	}
 
 private:
