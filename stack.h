@@ -244,10 +244,8 @@ public:
 			// Devo copiare array in array di un elemento più grande 
 			// con aggiunta di questo elemento
 		}
-		else{
-			_buffer[_size] = value;
-			_size++;
-		}
+		_buffer[_size] = value;
+		_size++;
 	}
 	
 	/**
@@ -256,7 +254,7 @@ public:
 		Svuota lo stack
 	*/
 	void clear() {
-		for (size_type i = 0; i < _size; ++i)
+		for (size_type i = _size; i > 0; --i)
 			this->pop();
 	}
 
@@ -372,13 +370,13 @@ public:
 	// Ritorna l'iteratore all'inizio della sequenza dati
 	// (punta all'ultimo elemento perche l'inizio della pila è la fine di _buffer)
 	const_iterator begin() const {
-		return const_iterator(_buffer+_capacity);
+		return const_iterator(_buffer+_capacity-1);
 	}
 	
 	// Ritorna l'iteratore alla fine della sequenza dati
 	// (punta al primo elemento perchè la fine della pila è l'inzio di _buffer)
 	const_iterator end() const {
-		return const_iterator(_buffer);
+		return const_iterator(_buffer-1);
 	}
 
 private:
