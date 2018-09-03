@@ -27,6 +27,8 @@ public:
 
 	typedef T value_type;
 
+	class const_iterator;
+
 	/**
 		@brief Costruttore di default (METODO FONDAMENTALE)
 
@@ -129,15 +131,17 @@ public:
 	stack(const const_iterator begin, const const_iterator end) : _size(0), 
 																  _buffer(0), 
 																  _capacity(0){
+		_capacity = end-begin;
 		_buffer = new T[(end/sizeof(T))];
 		_size = (end/sizeof(T));
-		_capacity = (end/sizeof(T));
+		// _capacity = (end/sizeof(T));
 
 		try {
-			for(const const_iterator i = begin; i != end; ++i)
+			for(const_iterator i = begin; i != end; ++i){
 				int a = 0;
-				_buffer[] = *begin;
+				_buffer[a] = *begin;
 				++a;
+			}
 		}
 		catch(...) {
 			delete[] _buffer;
@@ -148,8 +152,7 @@ public:
 		}
 
 		#ifndef NDEBUG
-		std::cout << "stack::stack(const const_iterator,
-					  const const_iterator)" << std::endl;
+		std::cout << "stack::stack(const const_iterator, const const_iterator)" << std::endl;
 		#endif
 	}
 
@@ -206,8 +209,8 @@ public:
 		@param L'iteratore che punta alla fine
 	*/
 
-	bino(const const_iterator begin, const const_iterator end){
-		if _buffer != 0;
+	stack bino(const const_iterator begin, const const_iterator end){
+		if (_buffer != 0)
 			clear();
 		stack tmp(begin, end);
 		this->swap(tmp);
@@ -230,7 +233,7 @@ public:
 		Aggiunge l'elemento in cima allo stack
 		@param L'elemento in cima allo stack
 	*/
-	void push(T &value){
+	void push(const T &value){
 		if(_size == _capacity){
 			stack tmp(this, _capacity*2);
 			for(size_type i = 0; i < _size; ++i){
@@ -348,6 +351,10 @@ public:
 			return ptr != other.ptr;
 		}
 
+		difference_type operator-(const const_iterator &other){
+			return ptr - other.ptr;
+		}
+
 	private:
 		friend class stack;
 
@@ -376,14 +383,14 @@ private:
 
 	size_type _size; ///< Dimensione dell'array
 	T *_buffer; ///< Puntatore all'array di elementi
-	size_type _capacity ///< Numero di elementi
+	size_type _capacity; ///< Numero di elementi
 
-	stack(const stack &other, size_type _capacity) : _size(0), 
+	stack(const stack &other, size_type capacity) : _size(0), 
 													 _buffer(0), 
 													 _capacity(0) {
-		_buffer = new T[_capacity];
+		_buffer = new T[capacity];
 		_size = other._size;
-		_capacity = _capacity;
+		_capacity = capacity;
 
 		try {
 			for(size_type i = 0; i < _size; ++i)

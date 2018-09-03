@@ -7,16 +7,19 @@
 int main() {
 	stack<int> s;
 	stack<int> s1(22);
-	stack<int> s2(22, 42);
+	stack<int> s2(3, 42);
+	std::cout << s2 << std::endl;
 	stack<int> s3(s2);
-	stack<int> s4 = s2;
+	stack<int> s4(s2.begin(), s2.end());
+	stack<int> s5 = s2;
+	s5.bino(s1.begin(), s1.end());
 	s.clear();
-	s.pop();
-	s.push(22);
-	s.size();
+	s2.pop();
+	s2.push(22);
+	s2.size();
 	s.swap(s2);
 	s2.begin();
-	s.end();
+	s2.end();
 	for (stack<int>::const_iterator i = s2.begin(); i != s2.end(); ++i){
 		std::cout << "bino" << std::endl;
 	}
