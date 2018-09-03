@@ -128,12 +128,12 @@ public:
 		Questo costruttore è usato per riempire lo stack.
 		(chiamo metodo seguente xD)
 	*/
-	stack(const const_iterator begin, const const_iterator end) : _size(0), 
-																  _buffer(0), 
-																  _capacity(0){
+	stack(const_iterator begin, const_iterator end) : _size(0), 
+													  _buffer(0), 
+													  _capacity(0){
 		_capacity = end-begin;
-		_buffer = new T[(end/sizeof(T))];
-		_size = (end/sizeof(T));
+		_buffer = new T[_capacity];
+		_size = _capacity;
 		// _capacity = (end/sizeof(T));
 
 		try {
@@ -209,7 +209,7 @@ public:
 		@param L'iteratore che punta alla fine
 	*/
 
-	stack bino(const const_iterator begin, const const_iterator end){
+	void bino(const const_iterator begin, const const_iterator end){
 		if (_buffer != 0)
 			clear();
 		stack tmp(begin, end);
@@ -235,17 +235,19 @@ public:
 	*/
 	void push(const T &value){
 		if(_size == _capacity){
-			stack tmp(this, _capacity*2);
+			stack tmp(*this, _capacity*2);
 			for(size_type i = 0; i < _size; ++i){
-				tmp[i] = this[i];
+				tmp._buffer[i] = this->_buffer[i];
 			}
-			tmp[_size] = value;
+			tmp._buffer[_size] = value;
 			this->swap(tmp);
 			// Devo copiare array in array di un elemento più grande 
 			// con aggiunta di questo elemento
 		}
-		_buffer[_size] = value;
-		_size = ++_size;
+		else{
+			_buffer[_size] = value;
+			_size++;
+		}
 	}
 	
 	/**
@@ -410,22 +412,5 @@ private:
 	}
 
 }; // stack
-
-/**
-	@brief Operatore di stream
-
-	Permette di spedire su uno stream di output il contenuto dell'array.
-
-	@param os stream di output
-	@param s stack da utilizzare
-	@return Il riferimento allo stream di output
-*/
-template <typename T>
-std::ostream& operator<<(std::ostream &os, const stack<T> & s) {
-	for (typename stack<T>::size_type i = 0; i < s.size(); ++i)
-		os << s[i] << " ";
-
-	return os;
-}
 
 #endif
