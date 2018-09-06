@@ -131,15 +131,14 @@ public:
 	stack(const_iterator begin, const_iterator end) : _size(0), 
 													  _buffer(0), 
 													  _capacity(0){
-		_capacity = end-begin;
+		_capacity = begin - end;
 		_buffer = new T[_capacity];
 		_size = _capacity;
-		// _capacity = (end/sizeof(T));
-
+		
 		try {
+			int a = 0;
 			for(const_iterator i = begin; i != end; ++i){
-				int a = 0;
-				_buffer[a] = *begin;
+				_buffer[a] = *i;
 				++a;
 			}
 		}
