@@ -208,7 +208,7 @@ public:
 		@param L'iteratore che punta alla fine
 	*/
 
-	void bino(const const_iterator begin, const const_iterator end){
+	void fill(const const_iterator begin, const const_iterator end){
 		if (_buffer != 0)
 			clear();
 		stack tmp(begin, end);
@@ -240,7 +240,7 @@ public:
 			}
 			tmp._buffer[_size] = value;
 			this->swap(tmp);
-			// Devo copiare array in array di un elemento più grande 
+			// Devo copiare array in array più grande 
 			// con aggiunta di questo elemento
 		}
 		_buffer[_size] = value;
@@ -275,6 +275,18 @@ public:
 	*/
 	size_type size() const {
 		return _size;
+	}
+
+	template<typename P>
+	void removeif(const P predicato, const T &elemento) {
+		stack tmp(_size);
+		for(size_type i = _size; i > 0; --i){
+			T popped = this->pop();
+			if(!predicato(popped, elemento)){
+				tmp.push(popped);
+			}
+		}
+		this->fill(tmp.begin(), tmp.end());
 	}
 
 	/**
@@ -369,7 +381,7 @@ public:
 	// Ritorna l'iteratore all'inizio della sequenza dati
 	// (punta all'ultimo elemento perche l'inizio della pila è la fine di _buffer)
 	const_iterator begin() const {
-		return const_iterator(_buffer+_capacity-1);
+		return const_iterator(_buffer+_size-1);
 	}
 	
 	// Ritorna l'iteratore alla fine della sequenza dati
