@@ -4,37 +4,65 @@
 
 template<typename T>
 struct equal {
-	bool operator()(const T &a, const T &b) const{
-		return a == b;
+	explicit equal(const T &parameter) : _parameter(parameter) {}
+
+	bool operator()(const T &a) const{
+		return a == _parameter;
 	}
+
+private: 
+	equal() {}
+
+	const T _parameter;
 };
 
 template<typename T>
 struct less_than {
-	bool operator()(const T &a, const T &b) const{
-		return a < b;
+	explicit less_than(const T &parameter) : _parameter(parameter) {}
+
+	bool operator()(const T &a) const{
+		return a < _parameter;
 	}
+
+private:
+	less_than() {}
+
+	const T _parameter;
+};
+
+struct cpu {
+	cpu() {}
+
+	cpu(const double clock, const int core_count) : _clock(clock), _core_count(core_count) {}
+
+	bool operator==(const cpu &b) const{
+		return _clock == b._clock && _core_count == b._core_count;
+	}
+
+	bool operator<(const cpu &b) const{
+		return (_clock*_core_count) < (b._clock*b._core_count);
+	}
+private:
+	
+
+	friend std::ostream& operator<<(std::ostream &os, const cpu &procio);
+	double _clock;
+	int _core_count;
+};
+
+std::ostream& operator<<(std::ostream &os, const cpu &procio) {
+	os << procio._clock << ", ";
+	os << procio._core_count;
+	return os;
 }
 
-struct bino {
-	int no;
-	int yes;
-
-	bool operator==(const bino &b) {}
-
-	bool operator<(const bino &b) {}
-}
-
-/**
-	@file main.cpp File di test di dbuffer
-**/	
 int main() {
 	// stack<int> s;
 	// stack<int> s1(22);
 	stack<int> s2(4, 42);
 	// stack<int> s3(s2);
 	// stack<int> s5 = s2;
-	// s5.bino(s1.begin(), s1.end());
+	// s5.fill(s1.begin(), s1.end());
 	s2.clear();
 	s2.push(1);
 	s2.push(2);
@@ -48,15 +76,15 @@ int main() {
 	// stack<int>::const_iterator b = s2.end();
 	// std::cout << *b << std::endl;
 
-	stack<bino> s1000(10, { a: 1, yes: "ok" });
+	cpu b(4.40, 8);
+	cpu a(3.50, 6);
 
-	int a = 1;
+	stack<cpu> s1000(10, cpu(0.5, 2));
+	s1000.push(a);
 
-	bino b = { a: 1, yes: "no" };
+	s1000.removeif(less_than<cpu>(cpu(0.6, 2)));
 
-	s4.removeif(equal<bino>(), 2);
-
-	for (stack<int>::const_iterator i = s4.begin(); i != s4.end(); ++i){
+	for (stack<cpu>::const_iterator i = s1000.begin(); i != s1000.end(); ++i){
 		std::cout << "nel for" << std::endl;
 		std::cout << *i << std::endl;
 	}

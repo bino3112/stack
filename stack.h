@@ -49,7 +49,7 @@ public:
 		Costruttore secondario. Permette di istanziare un stack con una data dimensione.
 		@param size Dimensione del stack da istanziare 
 	*/
-	explicit stack(size_type capacity) : _size(0), _buffer(0), _capacity(0) {
+	explicit stack(const size_type capacity) : _size(0), _buffer(0), _capacity(0) {
 		_buffer = new T[capacity];
 		_size = 0;
 		_capacity = capacity;
@@ -70,7 +70,7 @@ public:
 		@param capacity Dimensione del stack da istanziare
 		@param value Valore da usare per inizizalizzare le celle dell'array
 	*/
-	stack(size_type capacity, const T &value) : _size(0), _buffer(0), _capacity(0) {
+	stack(const size_type capacity, const T &value) : _size(0), _buffer(0), _capacity(0) {
 		_buffer = new T[capacity];
 		_size = capacity;
 		_capacity = capacity;
@@ -122,11 +122,11 @@ public:
 	}
 
 	/**
-		TODO:
-		Costruttore che prende una coppia di iteratori: uno che punta all’inizio
+		@brief Costruttore che prende una coppia di iteratori: uno che punta all’inizio
 		di una sequenza di elementi e uno che punta alla fine della sequenza.
-		Questo costruttore è usato per riempire lo stack.
-		(chiamo metodo seguente xD)
+
+		@param begin iteratore che punta alla cima dello stack
+		@param end iteratore che unta alla cella di memoria dopo l'ultimo elemento dello stack
 	*/
 	stack(const_iterator begin, const_iterator end) : _size(0), 
 													  _buffer(0), 
@@ -218,6 +218,7 @@ public:
 		@brief Rimozione dell'elemento in cima allo stack
 
 		Rimuove l'elemento in cima allo stack
+		@return l'elemento in cima allo stack
 	*/
 	T pop(){
 		T popped = _buffer[_size-1];
@@ -278,11 +279,11 @@ public:
 	}
 
 	template<typename P>
-	void removeif(const P predicato, const T &elemento) {
+	void removeif(const P predicato) {
 		stack tmp(_size);
 		for(size_type i = _size; i > 0; --i){
 			T popped = this->pop();
-			if(!predicato(popped, elemento)){
+			if(!predicato(popped)){
 				tmp.push(popped);
 			}
 		}
@@ -372,23 +373,20 @@ public:
 		// Costruttore privato di inizializzazione usato dalla classe container
 		// tipicamente nei metodi begin e end
 		const_iterator(const T *p) : ptr(p) {
-		}
-
-		// !!! Eventuali altri metodi privati
+			}
+		}; // classe const_iterator
 		
-	}; // classe const_iterator
-	
-	// Ritorna l'iteratore all'inizio della sequenza dati
-	// (punta all'ultimo elemento perche l'inizio della pila è la fine di _buffer)
-	const_iterator begin() const {
-		return const_iterator(_buffer+_size-1);
-	}
-	
-	// Ritorna l'iteratore alla fine della sequenza dati
-	// (punta al primo elemento perchè la fine della pila è l'inzio di _buffer)
-	const_iterator end() const {
-		return const_iterator(_buffer-1);
-	}
+		// Ritorna l'iteratore all'inizio della sequenza dati
+		// (punta all'ultimo elemento perche l'inizio della pila è la fine di _buffer)
+		const_iterator begin() const {
+			return const_iterator(_buffer+_size-1);
+		}
+		
+		// Ritorna l'iteratore alla fine della sequenza dati
+		// (punta al primo elemento perchè la fine della pila è l'inzio di _buffer)
+		const_iterator end() const {
+			return const_iterator(_buffer-1);
+		}
 
 private:
 
@@ -396,6 +394,11 @@ private:
 	T *_buffer; ///< Puntatore all'array di elementi
 	size_type _capacity; ///< Numero di elementi
 
+	/**
+		@brief Costruttore privato utilizzato dalla funzione fill che 
+		è come il copy constructor ma a cui passo una capacity differente
+
+	*/
 	stack(const stack &other, size_type capacity) : _size(0), 
 													 _buffer(0), 
 													 _capacity(0) {
