@@ -222,7 +222,7 @@ public:
 	*/
 	T pop(){
 		T popped = _buffer[_size-1];
-		_buffer[_size-1] = T(); // deallocazione memoria????????
+		// _buffer[_size-1] = T(); // deallocazione memoria????????
 		_size = _size-1;
 		return popped;
 	}
@@ -235,12 +235,23 @@ public:
 	*/
 	void push(const T &value){
 		if(_size == _capacity){
-			stack tmp(*this, _capacity*2);
-			for(size_type i = 0; i < _size; ++i){
-				tmp._buffer[i] = this->_buffer[i];
-			}
+			if(_capacity != 0){
+				stack tmp(*this, _capacity*2);
+				for(size_type i = 0; i < _size; ++i){
+					tmp._buffer[i] = this->_buffer[i];
+				}
 			tmp._buffer[_size] = value;
 			this->swap(tmp);
+			}
+			else{
+				stack tmp(*this, 1);
+				for(size_type i = 0; i < _size; ++i){
+					tmp._buffer[i] = this->_buffer[i];
+				}
+			tmp._buffer[_size] = value;
+			this->swap(tmp);
+			}
+			
 			// Devo copiare array in array più grande 
 			// con aggiunta di questo elemento
 		}
@@ -294,7 +305,6 @@ public:
 		@brief Scambia il contenuto di due stack
 
 		Scambia il contenuto di due stack.
-
 		@param other stack con il quale scambiare i dati 
 	*/
 	void swap(stack &other) {
@@ -397,7 +407,9 @@ private:
 	/**
 		@brief Costruttore privato utilizzato dalla funzione fill che 
 		è come il copy constructor ma a cui passo una capacity differente
-
+		
+		@param other stack da usare per creare quello corrente
+		@param capacity da usare invece di other._capacity
 	*/
 	stack(const stack &other, size_type capacity) : _size(0), 
 													 _buffer(0), 
