@@ -59,6 +59,7 @@ std::ostream& operator<<(std::ostream &os, const cpu &procio) {
 }
 
 void test_metodi_tipi_primitivi(){
+	std::cout << std::endl << "-----TEST STACK CON TIPI PRIMITIVI-----" << std::endl;
 	stack<int> s1;
 	stack<int> s2(5);
 	stack<int> s3(4, 42);
@@ -134,6 +135,7 @@ void test_metodi_tipi_primitivi(){
 }
 
 void test_metodi_standard_library(){
+	std::cout << std::endl << "-----TEST STACK CON TIPI DELLA STANDARD LIBRARY-----" << std::endl;
 	stack<std::string> s1;
 	stack<std::string> s2(5);
 	stack<std::string> s3(4, "ciao");
@@ -207,6 +209,7 @@ void test_metodi_standard_library(){
 }
 
 void test_metodi_tipi_generici(){
+	std::cout << std::endl << "-----TEST STACK CON TIPI GENERICI-----" << std::endl;
 	stack<cpu> s1;
 	stack<cpu> s2(5);
 	stack<cpu> s3(4, cpu(4.4, 6));
