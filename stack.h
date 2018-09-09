@@ -221,10 +221,14 @@ public:
 		@return l'elemento in cima allo stack
 	*/
 	T pop(){
-		T popped = _buffer[_size-1];
-		// _buffer[_size-1] = T(); // deallocazione memoria????????
-		_size = _size-1;
-		return popped;
+		if(_size != 0){
+			T popped = _buffer[_size-1];
+			_buffer[_size-1] = T(); // deallocazione memoria????????
+			_size = _size-1;
+			return popped;
+		}
+		else
+			return T();
 	}
 
 	/**

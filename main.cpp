@@ -31,7 +31,7 @@ private:
 };
 
 struct cpu {
-	cpu() {}
+	cpu() : _clock(0), _core_count(0) {}
 
 	cpu(const double clock, const int core_count) : _clock(clock), _core_count(core_count) {}
 
@@ -132,6 +132,11 @@ void test_metodi_tipi_primitivi(){
 	for (stack<int>::const_iterator i = s7.begin(); i != s7.end(); ++i){
 		std::cout << *i << std::endl;
 	}
+	stack<int> s8(2, 22);
+	std::cout << "TEST pop() su stack svuotato" << std::endl;
+	for (int i = s8.size(); i >= 0; --i)	{	
+		std::cout << s8.pop() << std::endl;
+	}
 }
 
 void test_metodi_standard_library(){
@@ -205,6 +210,11 @@ void test_metodi_standard_library(){
 	std::cout << "STACK DI ELEMENTI std::string dopo il removeif(less_than<std::string>(\"488 GTB\"))" << std::endl;
 	for (stack<std::string>::const_iterator i = s7.begin(); i != s7.end(); ++i){
 		std::cout << *i << std::endl;
+	}
+	stack<std::string> s8(2, "prova");
+	std::cout << "TEST pop() su stack svuotato" << std::endl;
+	for (int i = s8.size(); i >= 0; --i)	{	
+		std::cout << s8.pop() << std::endl;
 	}
 }
 
@@ -285,6 +295,11 @@ void test_metodi_tipi_generici(){
 	std::cout << "STACK DI ELEMENTI cpu dopo il removeif(less_than<cpu>(cpu(4.1, 4)))" << std::endl;
 	for (stack<cpu>::const_iterator i = s7.begin(); i != s7.end(); ++i){
 		std::cout << *i << std::endl;
+	}
+	std::cout << "TEST pop() su stack svuotato" << std::endl;
+	stack<cpu> s8(2, cpu(1,1));
+	for (int i = s8.size(); i >= 0; --i)	{	
+		std::cout << s8.pop() << std::endl;
 	}
 }
 
