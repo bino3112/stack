@@ -26,9 +26,9 @@ L'operatore di assegnamento che ha in ingresso uno stack e permette la copia tra
 
 Il metodo fill che ha la stessa funzionalità del costruttore con gli iteratori, infatti riceve anch'esso in input due iteratori ma controlla che lo stack su cui è stata chiamata la funzione sia vuoto, in caso contrario svuota lo stack. Fatto ciò chiama il costruttore con gli iteratori su uno stack temporaneo e poi fa la swap dei dati tra i due stack.
 
-Il metodo pop che ritorna l'elemento in cima allo stack rimuovendolo e diminuendo _size di 1.(parlare della eccezione appena fixo)
+Il metodo pop che ritorna l'elemento in cima allo stack rimuovendolo e diminuendo _size di 1.
 
-Il metodo push che riceve un elemento da porre in cima allo stack. Per fare ciò verifico che lo stack non sia pieno, ovvero che _size non sia uguale a _capacity, in caso contrario, se la capacità è diversa da 0, creo uno stack temporaneo con gli elementi dello stack a cui voglio aggiungere l'elemento ma con capacità doppia utilizzando un costruttore privato, quindi aggiungo l'elemento in cima allo stack temporaneo, aumento _size dello stack temporaneo e poi eseguo la swap. Nel caso in cui invece _capacity sia uguale a 0 creo uno stack temporaneo di dimensione 1 sulla cui cima cui aggiungo l'elemento e in eseguo la swap. Nel caso in cui invece lo stack non è pieno e la capacità è diversa da 0 aggiungo l'elemento in cima allo stack e aumento _size di 1.
+Il metodo push che riceve un elemento da porre in cima allo stack. Per fare ciò verifico che lo stack non sia pieno, ovvero che _size non sia uguale a _capacity, in caso contrario, se la capacità è diversa da 0, creo uno stack temporaneo con gli elementi dello stack a cui voglio aggiungere l'elemento ma con capacità doppia utilizzando un costruttore privato e poi eseguo la swap. Nel caso in cui invece _capacity sia uguale a 0 creo uno stack temporaneo di dimensione 1 ed eseguo la swap. Dopo la swap di entrambi aggiungo l'elemento in cima allo stack e aumento _size di 1.
 
 Il metodo clear che svuota lo stack chiamando con un ciclo for il metodo pop fino allo svuotamento di esso.
 

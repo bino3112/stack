@@ -135,9 +135,12 @@ void test_metodi_tipi_primitivi(){
 	}
 	stack<int> s8(2, 22);
 	std::cout << "TEST pop() su stack svuotato" << std::endl;
-	for (int i = s8.size(); i >= 0; --i)	{	
-		std::cout << s8.pop() << std::endl;
+	try{
+		for (int i = s8.size(); i >= 0; --i){	
+			std::cout << s8.pop() << std::endl;
+		}
 	}
+	catch(...){};
 }
 
 void test_metodi_standard_library(){
@@ -215,9 +218,12 @@ void test_metodi_standard_library(){
 	}
 	stack<std::string> s8(2, "prova");
 	std::cout << "TEST pop() su stack svuotato" << std::endl;
-	for (int i = s8.size(); i >= 0; --i)	{	
+	try{
+	for (int i = s8.size(); i >= 0; --i){	
 		std::cout << s8.pop() << std::endl;
 	}
+	}
+	catch(...) {};
 }
 
 void test_metodi_tipi_generici(){
@@ -301,9 +307,12 @@ void test_metodi_tipi_generici(){
 	}
 	std::cout << "TEST pop() su stack svuotato" << std::endl;
 	stack<cpu> s8(2, cpu(1,1));
-	for (int i = s8.size(); i >= 0; --i)	{	
-		std::cout << s8.pop() << std::endl;
+	try{
+		for (int i = s8.size(); i >= 0; --i){	
+			std::cout << s8.pop() << std::endl;
+		}
 	}
+	catch(...) {};
 }
 
 

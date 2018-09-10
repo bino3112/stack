@@ -226,7 +226,7 @@ public:
 			return popped;
 		}
 		else
-			throw std::out_of_range("ok");
+			throw std::out_of_range("pop di uno stack vuoto");
 	}
 
 	/**
@@ -239,21 +239,15 @@ public:
 		if(_size == _capacity){
 			if(_capacity != 0){
 				stack tmp(*this, _capacity*2);
-				tmp._stack[_size] = value;
-				tmp._size++;
 				this->swap(tmp);
 			}
 			else{
 				stack tmp(*this, 1);
-				tmp._stack[_size] = value;
-				tmp._size++;
 				this->swap(tmp);
 			}
 		}
-		else{
-			_stack[_size] = value;
-			_size++;
-		}
+		_stack[_size] = value;
+		_size++;
 	}
 	
 	/**
