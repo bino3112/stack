@@ -1,0 +1,43 @@
+Relazione progetto C++
+Nome : Alessandro
+Cognome: Colombo
+Matricola: 794015
+Mail: a.colombo146@campus.unimib.it
+
+Introduzione:
+Per rappresentare lo stack ho deciso di utilizzare un array dinamico.
+
+Tipi di dati:
+La classe stack da me creata ha tre variabili:
+    • _bstack di tipo T, che rappresenta il puntatore agli elementi contenuti nello stack.
+    • _size di tipo size_tipe, ovvero unsigned int, che è uguale al numero di elementi contenuti all’interno dello stack.
+    • _capacity di tipo size_type, che è equivalente alla dimensione massima attuale dello stack, che verrà incrementata se necessario.
+
+Implementazione dello stack e metodi:
+Per l’implementazione dello stack ho utilizzato un array dinamico poichè, nella consegna del progetto, era espressamente vietato l’utilizzo di una strutura a lista. Essendo uno stack ho dovuto decidere quale elemento fosse la cima e quale il fondo di esso, ho deciso di avere il fondo dello stack nell’elemento in posizione [0]del mio array e la cima nell’elemeto in posizione [_size-1]. Ho fatto questa scelta implementativa poichè, se avessi avuto la cima e il fondo invertiti, all’introduzione di ogni nuovo elemento nello stack, attraverso la push, avrei dovuto riposizionare gli elementi dell’array in una nuova posizione e avre dovuto fare lo stesso per la rimozione dell’elemento in cima allo stack attraverso la pop. Facendo ciò però ho dovuto modificare i valori di begin ed end nell’iteratore che ho definito nella mia classe per puntare ai valori corretti. L’iteratore che ho implementato doveva essere un iteratore di sola lettura che deve ritornare gli elementi a partire dalla cima della pila fino a quello in fondo ad essa, per questo motivo ho deciso di utilizzare un const forward iterator. Inoltre, sempre per la scelta implementativa riguardante la cima e il fondo dello stack, gli operatori di pre e post incremento dell’iteratore funzionano al contrario poichè devono restituire la cella di memoria precedente a quella a cui stanno puntando attualmente.
+
+Come ogni classe ho implementato il costruttore di default, che nel mio caso crea uno stack vuoto con tutte le variabili uguali a zero, e il distruttore, che elimina ogni allocazione in memoria effettuata durante l’esecuzione del programma. Inoltre ho anche implementato due costruttori secondari, il primo che permette la creazione di uno stack vuoto di capacità N definita dall’utente, mentre il secondo, in aggiunta, permette di riempirlo con un valore anch’esso definito dall’utente. 
+
+In ordine di scrittura all’interno del file .h troviamo ora il costruttore di copia, che permette la creazione di uno stack con i valori presi da uno stack secondario, per fare ciò crea uno stack con _size e _capacity uguali allo stack secondario e poi va a riempire attraverso un ciclo for lo stack da costruire.
+
+Un altro costruttore che veniva richiesto nella consegna d’esame, ovvero un costruttore che prenda in input due iteratori, uno che punta all’inzio di una sequenza di elementi e uno che punta alla fine di essa. Questo crea uno stack con _size e _capacity uguali alla differenza tra i due operatori e in seguito riempie lo stack attraverso un ciclo for.
+
+L'operatore di assegnamento che ha in ingresso uno stack e permette la copia tra stack. Per fare ciò crea uno stack temporaneo uguale allo stack ricevuto in input mediante il costruttore di copia, dopodichè viene effettuata una swap tra i dati dello stack in cui voglio copiare i dati e lo stack tmp che ha i dati che mi servono.
+
+Il metodo fill che ha la stessa funzionalità del costruttore con gli iteratori, infatti riceve anch'esso in input due iteratori ma controlla che lo stack su cui è stata chiamata la funzione sia vuoto, in caso contrario svuota lo stack. Fatto ciò chiama il costruttore con gli iteratori su uno stack temporaneo e poi fa la swap dei dati tra i due stack.
+
+Il metodo pop che ritorna l'elemento in cima allo stack rimuovendolo e diminuendo _size di 1.(parlare della eccezione appena fixo)
+
+Il metodo push che riceve un elemento da porre in cima allo stack. Per fare ciò verifico che lo stack non sia pieno, ovvero che _size non sia uguale a _capacity, in caso contrario, se la capacità è diversa da 0, creo uno stack temporaneo con gli elementi dello stack a cui voglio aggiungere l'elemento ma con capacità doppia utilizzando un costruttore privato, quindi aggiungo l'elemento in cima allo stack temporaneo, aumento _size dello stack temporaneo e poi eseguo la swap. Nel caso in cui invece _capacity sia uguale a 0 creo uno stack temporaneo di dimensione 1 sulla cui cima cui aggiungo l'elemento e in eseguo la swap. Nel caso in cui invece lo stack non è pieno e la capacità è diversa da 0 aggiungo l'elemento in cima allo stack e aumento _size di 1.
+
+Il metodo clear che svuota lo stack chiamando con un ciclo for il metodo pop fino allo svuotamento di esso.
+
+Il metodo capacity che ritorna la dimensione massima attuale dello stack
+
+Il metodo size che ritorna il numero di elementi contenuti nello stack
+
+Il metodo templato removeif che riceve un predicato su un elemento e rimuove gli elementi dello stack che soddisfano quel particolare predicato. Per fare ciò creo uno stack temporaneo di dimensione uguale allo stack da cui voglio rimuovere gli elementi e con un ciclo for vado a verificare se l'elemento in cima allo stack deve essere rimosso o meno. Nel caso in cui non vada rimosso, l'elemento viene aggiunto mediante il metodo push nello stack temporaneo. Finito il ciclo for utilizzo il metodo fill per riempire lo stack a partire dal mio stack temporaneo così da mantenere invariato l'ordine degli elementi che verrebbe rovesciato in caso di una swap.
+
+Il metodo swap che riceve in input uno stack e viene utilizzato per scambiare gli elementi da uno stack all'altro utilizzando la funzione della libreria standard swap.
+
+Poichè la struttura dati da creare è uno stack ho deciso di non impleentare l'operator<< poichè all'utente deve essere visibile solo la cima dello stack che è già accessibile attraverso il metodo pop.

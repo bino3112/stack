@@ -96,6 +96,7 @@ void test_metodi_tipi_primitivi(){
 	s2.push(10);
 	s2.push(11);
 	s2.push(12);
+	s6.push(22);
 	s6.fill(s2.begin(), s2.end());
 	std::cout << "STACK DI ELEMENTI int UTILIZZANDO METODO fill" << std::endl;
 	for (stack<int>::const_iterator i = s6.begin(); i != s6.end(); ++i){
@@ -177,6 +178,7 @@ void test_metodi_standard_library(){
 	s2.push("BOXER");
 	s2.push("V6");
 	s2.push("V12");
+	s6.push("ELETTRICO");
 	s6.fill(s2.begin(), s2.end());
 	std::cout << "STACK DI ELEMENTI std::string UTILIZZANDO METODO fill" << std::endl;
 	for (stack<std::string>::const_iterator i = s6.begin(); i != s6.end(); ++i){
@@ -256,6 +258,7 @@ void test_metodi_tipi_generici(){
 	s2.push(cpu(2.4, 1));
 	s2.push(cpu(2, 6));
 	s2.push(cpu(4.8, 4));
+	s6.push(cpu(1, 1));
 	s6.fill(s2.begin(), s2.end());
 	std::cout << "STACK DI ELEMENTI cpu UTILIZZANDO METODO fill" << std::endl;
 	for (stack<cpu>::const_iterator i = s6.begin(); i != s6.end(); ++i){

@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <iterator> // std::forward_iterator_tag
 #include <cstddef>  // std::ptrdiff_t
+#include <stdexcept>
 
 /**
 @file stack.h 
@@ -35,7 +36,7 @@ public:
 		Costruttore di default per istanziare uno stack vuoto. E' l'unico costruttore
 		che puo' essere usato per create un array di stack!
 	*/
-	stack() : _size(0), _buffer(0), _capacity(0) { // initialization list
+	stack() : _size(0), _stack(0), _capacity(0) { // initialization list
 		#ifndef NDEBUG
 		std::cout << "stack::stack()" << std::endl;
 		#endif
@@ -44,13 +45,11 @@ public:
 	/**
 		@brief Costruttore secondario
 
-		TODO: decidere/verificare se tenere questi costruttori
-
 		Costruttore secondario. Permette di istanziare un stack con una data dimensione.
 		@param size Dimensione del stack da istanziare 
 	*/
-	explicit stack(const size_type capacity) : _size(0), _buffer(0), _capacity(0) {
-		_buffer = new T[capacity];
+	explicit stack(const size_type capacity) : _size(0), _stack(0), _capacity(0) {
+		_stack = new T[capacity];
 		_size = 0;
 		_capacity = capacity;
 
@@ -62,27 +61,25 @@ public:
 	/**
 		@brief Costruttore secondario
 
-		TODO: decidere/verificare se tenere questi costruttori
-
 		Costruttore secondario. Permette di istanziare un stack con una data dimensione
 		e di inizializzare le celle dell'array con il valore dato
 
 		@param capacity Dimensione del stack da istanziare
 		@param value Valore da usare per inizizalizzare le celle dell'array
 	*/
-	stack(const size_type capacity, const T &value) : _size(0), _buffer(0), _capacity(0) {
-		_buffer = new T[capacity];
+	stack(const size_type capacity, const T &value) : _size(0), _stack(0), _capacity(0) {
+		_stack = new T[capacity];
 		_size = capacity;
 		_capacity = capacity;
 
 		try {
 			for(size_type i = 0; i < _size; ++i)
-				_buffer[i] = value;
+				_stack[i] = value;
 		}
 		catch(...) {
-			delete[] _buffer;
+			delete[] _stack;
 			_size = 0;
-			_buffer = 0;
+			_stack = 0;
 			_capacity= 0;
 			throw;
 		}
@@ -99,19 +96,19 @@ public:
 		presi da un altro stack.
 		@param other stack da usare per creare quello corrente
 	*/
-	stack(const stack &other) : _size(0), _buffer(0), _capacity(0) {
-		_buffer = new T[other._capacity];
+	stack(const stack &other) : _size(0), _stack(0), _capacity(0) {
+		_stack = new T[other._capacity];
 		_size = other._size;
 		_capacity = other._capacity;
 
 		try {
 			for(size_type i = 0; i < _size; ++i)
-				_buffer[i] = other._buffer[i];
+				_stack[i] = other._stack[i];
 		}
 		catch(...) {
-			delete[] _buffer;
+			delete[] _stack;
 			_size = 0;
-			_buffer = 0;
+			_stack = 0;
 			_capacity = 0;
 			throw;
 		}
@@ -129,23 +126,23 @@ public:
 		@param end iteratore che unta alla cella di memoria dopo l'ultimo elemento dello stack
 	*/
 	stack(const_iterator begin, const_iterator end) : _size(0), 
-													  _buffer(0), 
+													  _stack(0), 
 													  _capacity(0){
 		_capacity = begin - end;
-		_buffer = new T[_capacity];
+		_stack = new T[_capacity];
 		_size = _capacity;
 		
 		try {
 			int a = 0;
 			for(const_iterator i = begin; i != end; ++i){
-				_buffer[a] = *i;
+				_stack[a] = *i;
 				++a;
 			}
 		}
 		catch(...) {
-			delete[] _buffer;
+			delete[] _stack;
 			_size = 0;
-			_buffer = 0;
+			_stack = 0;
 			_capacity = 0;
 			throw;
 		}
@@ -190,8 +187,8 @@ public:
 		Distruttore. Rimuove la memoria allocata da stack.
 	*/
 	~stack() {
-		delete[] _buffer;
-		_buffer = 0;
+		delete[] _stack;
+		_stack = 0;
 		_size = 0;
 		_capacity = 0;
 
@@ -209,8 +206,8 @@ public:
 	*/
 
 	void fill(const const_iterator begin, const const_iterator end){
-		if (_buffer != 0)
-			clear();
+		if (_stack != 0)
+			this->clear();
 		stack tmp(begin, end);
 		this->swap(tmp);
 	}
@@ -220,15 +217,16 @@ public:
 		Rimuove l'elemento in cima allo stack
 		@return l'elemento in cima allo stack
 	*/
+
 	T pop(){
-		if(_size != 0){
-			T popped = _buffer[_size-1];
-			_buffer[_size-1] = T(); // deallocazione memoria????????
+		if(_size > 0){
+			T popped = _stack[_size-1];
+			_stack[_size-1] = T(); // azzeramento locazione di memoria
 			_size = _size-1;
 			return popped;
 		}
 		else
-			return T();
+			throw std::out_of_range("ok");
 	}
 
 	/**
@@ -241,26 +239,21 @@ public:
 		if(_size == _capacity){
 			if(_capacity != 0){
 				stack tmp(*this, _capacity*2);
-				for(size_type i = 0; i < _size; ++i){
-					tmp._buffer[i] = this->_buffer[i];
-				}
-			tmp._buffer[_size] = value;
-			this->swap(tmp);
+				tmp._stack[_size] = value;
+				tmp._size++;
+				this->swap(tmp);
 			}
 			else{
 				stack tmp(*this, 1);
-				for(size_type i = 0; i < _size; ++i){
-					tmp._buffer[i] = this->_buffer[i];
-				}
-			tmp._buffer[_size] = value;
-			this->swap(tmp);
+				tmp._stack[_size] = value;
+				tmp._size++;
+				this->swap(tmp);
 			}
-			
-			// Devo copiare array in array più grande 
-			// con aggiunta di questo elemento
 		}
-		_buffer[_size] = value;
-		_size++;
+		else{
+			_stack[_size] = value;
+			_size++;
+		}
 	}
 	
 	/**
@@ -312,7 +305,7 @@ public:
 		@param other stack con il quale scambiare i dati 
 	*/
 	void swap(stack &other) {
-		std::swap(other._buffer, this->_buffer);
+		std::swap(other._stack, this->_stack);
 		std::swap(other._size, this->_size);
 		std::swap(other._capacity, this-> _capacity);
 	}
@@ -353,7 +346,7 @@ public:
 		}
 
 		// Operatore di iterazione post-incremento
-		// (diminuisco perchè scorro _buffer dalla fine all'inizio)
+		// (diminuisco perchè scorro _stack dalla fine all'inizio)
 		const_iterator operator++(int) {
 			const_iterator tmp(*this);
 			--ptr;
@@ -361,7 +354,7 @@ public:
 		}
 
 		// Operatore di iterazione pre-incremento
-		// (diminuisco perchè scorro _buffer dalla fine all'inizio)
+		// (diminuisco perchè scorro _stack dalla fine all'inizio)
 		const_iterator& operator++() {
 			--ptr;
 			return *this;
@@ -391,22 +384,22 @@ public:
 		}; // classe const_iterator
 		
 		// Ritorna l'iteratore all'inizio della sequenza dati
-		// (punta all'ultimo elemento perche l'inizio della pila è la fine di _buffer)
+		// (punta all'ultimo elemento perche l'inizio della pila è la fine di _stack)
 		const_iterator begin() const {
-			return const_iterator(_buffer+_size-1);
+			return const_iterator(_stack+_size-1);
 		}
 		
 		// Ritorna l'iteratore alla fine della sequenza dati
-		// (punta al primo elemento perchè la fine della pila è l'inzio di _buffer)
+		// (punta al primo elemento perchè la fine della pila è l'inzio di _stack)
 		const_iterator end() const {
-			return const_iterator(_buffer-1);
+			return const_iterator(_stack-1);
 		}
 
 private:
 
-	size_type _size; ///< Dimensione dell'array
-	T *_buffer; ///< Puntatore all'array di elementi
-	size_type _capacity; ///< Numero di elementi
+	size_type _size; ///< Numero di elementi
+	T *_stack; ///< Puntatore all'array di elementi
+	size_type _capacity; ///< Dimensione dell'array
 
 	/**
 		@brief Costruttore privato utilizzato dalla funzione fill che 
@@ -416,20 +409,20 @@ private:
 		@param capacity da usare invece di other._capacity
 	*/
 	stack(const stack &other, size_type capacity) : _size(0), 
-													 _buffer(0), 
+													 _stack(0), 
 													 _capacity(0) {
-		_buffer = new T[capacity];
+		_stack = new T[capacity];
 		_size = other._size;
 		_capacity = capacity;
 
 		try {
 			for(size_type i = 0; i < _size; ++i)
-				_buffer[i] = other._buffer[i];
+				_stack[i] = other._stack[i];
 		}
 		catch(...) {
-			delete[] _buffer;
+			delete[] _stack;
 			_size = 0;
-			_buffer = 0;
+			_stack = 0;
 			_capacity = 0;
 			throw;
 		}
